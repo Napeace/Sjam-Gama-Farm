@@ -47,7 +47,7 @@
         <div class="relative h-full overflow-hidden rounded-none">
             <!-- Item 1 -->
             <div class="hidden duration-700 ease-in-out" data-carousel-item>
-                <img src="https://asset.kompas.com/crops/pwHQ8C7LuHZkioyRQuYhxP8oUio=/107x156:834x640/1200x800/data/photo/2022/09/29/63354297c3995.jp"
+                <img src="https://asset.kompas.com/crops/pwHQ8C7LuHZkioyRQuYhxP8oUio=/107x156:834x640/1200x800/data/photo/2022/09/29/63354297c3995.jpg"
                      class="absolute w-full h-full object-cover top-0 left-0" alt="Hidroponik">
                 <div class="carousel-caption">
                     <h3>Hidroponik</h3>
