@@ -57,20 +57,20 @@
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2 line-clamp-2">{{ $artikel->judul }}</h3>
                         <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-                            {{ Str::limit(strip_tags($artikel->konten), 150) }}
+                            {{ Str::limit(strip_tags($artikel->isi), 150) }}
                         </p>
 
                         <!-- Tombol Aksi -->
                         <div class="flex justify-between items-center">
                             <span class="text-xs text-gray-500">{{ $artikel->created_at->format('d M Y') }}</span>
                             <div class="flex space-x-2">
-                                <a href="{{ route('mitra.artikel.edit', $artikel->id) }}" class="text-blue-600 hover:text-blue-800">
+                                <a href="{{ route('mitra.artikel.edit', $artikel) }}" class="text-blue-600 hover:text-blue-800">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                 </a>
 
-                                <form action="{{ route('mitra.artikel.destroy', $artikel->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')">
+                                <form action="{{ route('mitra.artikel.destroy', $artikel) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-800 cursor-pointer">

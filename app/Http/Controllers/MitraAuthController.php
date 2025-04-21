@@ -32,26 +32,52 @@ class MitraAuthController extends Controller
         return redirect('/LoginMitra');
     }
 
+    public function showAkun()
+    {
+        $user = Auth::user();
+        return view('mitra.DataAkun', compact('user'));
+    }
+
+    public function editAkun()
+    {
+        $user = Auth::user();
+        return view('mitra.EditAkun', compact('user'));
+    }
+
     public function updateAkun(Request $request)
     {
         $request->validate([
             'username_baru' => 'required|string|max:255',
-            'password_lama' => 'required|string',
-            'password_baru' => 'required|string|min:8',
+            'alamat' => 'required|string|max:255',
+            'no_hp' => 'required|numeric|digits_between:10,15',
+            'email' => 'required|email|max:255',
         ]);
 
         $user = Auth::user();
 
-        // Verify the old password
-        if (!Hash::check($request->password_lama, $user->password)) {
-            return back()->withErrors(['password_lama' => 'Password lama tidak sesuai']);
-        }
-
         // Update the user data
         $user->username = $request->username_baru;
-        $user->password = Hash::make($request->password_baru);
+        $user->alamat = $request->alamat;
+        $user->no_hp = $request->no_hp;
+        $user->email = $request->email;
+
+        // Optional password update
+        if ($request->filled('password_lama') && $request->filled('password_baru')) {
+            $request->validate([
+                'password_lama' => 'required|string',
+                'password_baru' => 'required|string|min:8',
+            ]);
+
+            // Verify the old password
+            if (!Hash::check($request->password_lama, $user->password)) {
+                return back()->withErrors(['password_lama' => 'Password lama tidak sesuai']);
+            }
+
+            $user->password = Hash::make($request->password_baru);
+        }
+
         $user->save();
 
-        return redirect()->route('mitra.dashboard')->with('success', 'Akun berhasil diperbarui');
+        return redirect()->route('mitra.DataAkun')->with('success', 'Akun berhasil diperbarui');
     }
 }

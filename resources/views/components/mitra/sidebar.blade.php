@@ -10,7 +10,7 @@
         <p class="text-sm font-semibold">Admin</p>
 
         {{-- Link ke Edit Akun --}}
-        <a href="{{ route('mitra.EditAkun') }}" class="text-base mt-2 hover:underline">Akun</a>
+        <a href="{{ route('mitra.DataAkun') }}" class="text-base mt-2 hover:underline">Akun</a>
 
         <hr class="my-4 w-4/5 border-gray-400" />
     </div>

@@ -21,7 +21,7 @@
 
         <!-- Form Editor -->
         <div class="bg-white rounded-lg shadow-md p-6">
-            <form action="{{ isset($artikel) ? route('mitra.artikel.update', $artikel->id) : route('mitra.artikel.store') }}"
+            <form action="{{ isset($artikel) ? route('mitra.artikel.update', $artikel) : route('mitra.artikel.store') }}"
                   method="POST"
                   enctype="multipart/form-data"
                   id="artikelForm">
@@ -106,35 +106,58 @@
 </div>
 
 <!-- Script untuk Editor WYSIWYG -->
-<!-- Script untuk Editor WYSIWYG -->
 <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let editor;
-        ClassicEditor
-            .create(document.querySelector('#isi'))
-            .then(newEditor => {
-                editor = newEditor;
+document.addEventListener('DOMContentLoaded', function() {
+    let editor;
+    ClassicEditor
+        .create(document.querySelector('#isi'), {
+            toolbar: {
+                items: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    'link',
+                    '|',
+                    'bulletedList',
+                    'numberedList',
+                    '|',
+                    'blockQuote',
+                    'insertTable',
+                    '|',
+                    'undo',
+                    'redo'
+                ]
+            },
+            image: {
+                // Disable image support completely
+                toolbar: []
+            }
+        })
+        .then(newEditor => {
+            editor = newEditor;
 
-                // Event handler untuk tombol submit
-                document.getElementById('submitArtikel').addEventListener('click', function() {
-                    // Ambil data dari CKEditor dan masukkan ke textarea
-                    document.querySelector('#isi').value = editor.getData();
+            // Event handler untuk tombol submit
+            document.getElementById('submitArtikel').addEventListener('click', function() {
+                // Ambil data dari CKEditor dan masukkan ke textarea
+                document.querySelector('#isi').value = editor.getData();
 
-                    // Debug - lihat nilai yang akan disubmit
-                    console.log('Judul:', document.querySelector('#judul').value);
-                    console.log('Isi:', document.querySelector('#isi').value);
+                // Debug - lihat nilai yang akan disubmit
+                console.log('Judul:', document.querySelector('#judul').value);
+                console.log('Isi:', document.querySelector('#isi').value);
 
-                    // Submit form
-                    document.getElementById('artikelForm').submit();
-                });
-            })
-            .catch(error => {
-                console.error(error);
+                // Submit form
+                document.getElementById('artikelForm').submit();
             });
-    });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+});
 
-    function displayFileName(input) {
+// Fungsi untuk preview gambar
+function displayFileName(input) {
     const fileName = input.files[0]?.name;
     document.getElementById('file-name').textContent = fileName || 'Belum ada file dipilih';
 

@@ -44,12 +44,19 @@ Route::get('/DashboardMitra', function () {
     return view('mitra.DashboardMitra');
 })->name('mitra.dashboard');
 
-// Edit akun
+// Akun routes
+Route::get('/DataAkun', function () {
+    if (!Auth::check()) {
+        return redirect('/LoginMitra');
+    }
+    return app(\App\Http\Controllers\MitraAuthController::class)->showAkun();
+})->name('mitra.DataAkun');
+
 Route::get('/EditAkun', function () {
     if (!Auth::check()) {
         return redirect('/LoginMitra');
     }
-    return view('mitra.EditAkun');
+    return app(\App\Http\Controllers\MitraAuthController::class)->editAkun();
 })->name('mitra.EditAkun');
 
 Route::put('/updateAkun', function () {
@@ -81,24 +88,23 @@ Route::post('/DashboardMitra/Artikel', function () {
     return app(\App\Http\Controllers\ArtikelController::class)->store(request());
 })->name('mitra.artikel.store');
 
-Route::get('/DashboardMitra/Artikel/{artikel}/edit', function ($artikel) {
+Route::get('/DashboardMitra/Artikel/{artikel}/edit', function (App\Models\Artikel $artikel) {
     if (!Auth::check()) {
         return redirect('/LoginMitra');
     }
     return app(\App\Http\Controllers\ArtikelController::class)->edit($artikel);
 })->name('mitra.artikel.edit');
 
-Route::put('/DashboardMitra/Artikel/{artikel}', function ($artikel) {
+Route::put('/DashboardMitra/Artikel/{artikel}', function (App\Models\Artikel $artikel) {
     if (!Auth::check()) {
         return redirect('/LoginMitra');
     }
     return app(\App\Http\Controllers\ArtikelController::class)->update(request(), $artikel);
 })->name('mitra.artikel.update');
 
-Route::delete('/DashboardMitra/Artikel/{artikel}', function ($artikel) {
+Route::delete('/DashboardMitra/Artikel/{artikel}', function (App\Models\Artikel $artikel) {
     if (!Auth::check()) {
         return redirect('/LoginMitra');
     }
     return app(\App\Http\Controllers\ArtikelController::class)->destroy($artikel);
 })->name('mitra.artikel.destroy');
-
