@@ -82,6 +82,7 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <!-- Konten -->
                 <div class="mb-6">
                     <label for="isi" class="block text-gray-700 font-medium mb-2">Konten</label>
@@ -94,6 +95,7 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+
                 <!-- Tombol Submit -->
                 <div class="flex justify-end">
                     <button type="button" id="submitArtikel" class="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded cursor-pointer">
@@ -105,80 +107,88 @@
     </div>
 </div>
 
-<!-- Script untuk Editor WYSIWYG -->
-<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+<!-- TinyMCE Editor -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let editor;
-    ClassicEditor
-        .create(document.querySelector('#isi'), {
-            toolbar: {
-                items: [
-                    'heading',
-                    '|',
-                    'bold',
-                    'italic',
-                    'link',
-                    '|',
-                    'bulletedList',
-                    'numberedList',
-                    '|',
-                    'blockQuote',
-                    'insertTable',
-                    '|',
-                    'undo',
-                    'redo'
-                ]
-            },
-            image: {
-                // Disable image support completely
-                toolbar: []
-            }
-        })
-        .then(newEditor => {
-            editor = newEditor;
-
-            // Event handler untuk tombol submit
-            document.getElementById('submitArtikel').addEventListener('click', function() {
-                // Ambil data dari CKEditor dan masukkan ke textarea
-                document.querySelector('#isi').value = editor.getData();
-
-                // Debug - lihat nilai yang akan disubmit
-                console.log('Judul:', document.querySelector('#judul').value);
-                console.log('Isi:', document.querySelector('#isi').value);
-
-                // Submit form
-                document.getElementById('artikelForm').submit();
+    document.addEventListener('DOMContentLoaded', function() {
+    tinymce.init({
+        selector: '#isi',
+        // Hanya gunakan plugin inti yang gratis
+        plugins: [
+            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons',
+            'image', 'link', 'lists', 'media', 'searchreplace',
+            'table', 'visualblocks', 'wordcount', 'code', 'fullscreen', 'preview'
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | ' +
+                'link image media table | code fullscreen preview | ' +
+                'align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        // Pengaturan tambahan untuk meningkatkan pengalaman
+        height: 500,
+        menubar: true,
+        branding: false,
+        promotion: false,
+        relative_urls: false,
+        remove_script_host: false,
+        convert_urls: true,
+        // Image upload handling (opsional)
+        images_upload_handler: function (blobInfo, progress) {
+            return new Promise((resolve, reject) => {
+                // Untuk development, bisa pakai URL data saja
+                const reader = new FileReader();
+                reader.onload = function () {
+                    resolve(reader.result);
+                };
+                reader.readAsDataURL(blobInfo.blob());
             });
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        },
+        // Basic template untuk memudahkan pengguna
+        templates: [
+            { title: 'Template artikel', description: 'Template dasar untuk artikel', content: '<h2>Judul Bagian</h2><p>Isi paragraf artikel...</p>' }
+        ],
+        // Fallback untuk pesan error TinyMCE tentang domain
+        setup: function(editor) {
+            editor.on('init', function() {
+                // Menghapus pesan domain tidak terdaftar jika ada
+                const noticeElements = document.querySelectorAll('.tox-notification');
+                noticeElements.forEach(function(notice) {
+                    if (notice.textContent.includes('domain is not registered')) {
+                        notice.style.display = 'none';
+                    }
+                });
+            });
+        }
+    });
+
+    // Event handler untuk tombol submit (tetap seperti sebelumnya)
+    document.getElementById('submitArtikel').addEventListener('click', function() {
+        tinymce.triggerSave();
+        console.log('Judul:', document.querySelector('#judul').value);
+        console.log('Isi:', document.querySelector('#isi').value);
+        document.getElementById('artikelForm').submit();
+    });
 });
 
-// Fungsi untuk preview gambar
-function displayFileName(input) {
-    const fileName = input.files[0]?.name;
-    document.getElementById('file-name').textContent = fileName || 'Belum ada file dipilih';
+    // Fungsi untuk preview gambar
+    function displayFileName(input) {
+        const fileName = input.files[0]?.name;
+        document.getElementById('file-name').textContent = fileName || 'Belum ada file dipilih';
 
-    // Preview gambar
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        const imagePreview = document.getElementById('image-preview');
-        const previewText = document.getElementById('preview-text');
+        // Preview gambar
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            const imagePreview = document.getElementById('image-preview');
+            const previewText = document.getElementById('preview-text');
 
-        reader.onload = function(e) {
-            // Tampilkan gambar preview
-            imagePreview.src = e.target.result;
-            imagePreview.classList.remove('hidden');
+            reader.onload = function(e) {
+                // Tampilkan gambar preview
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
 
-            // Update teks
-            previewText.textContent = 'Preview gambar yang akan diunggah';
+                // Update teks
+                previewText.textContent = 'Preview gambar yang akan diunggah';
+            }
+
+            reader.readAsDataURL(input.files[0]);
         }
-
-        reader.readAsDataURL(input.files[0]);
     }
-}
 </script>
-
 @endsection

@@ -52,6 +52,9 @@
                 <template x-if="title === 'Hidroponik'">
                     <ul class="space-y-6">
                         <li>
+                            <a href="#" class="block py-2 text-white hover:text-gray-300 border-b border-gray-500">Produk</a>
+                        </li>
+                        <li>
                             <a href="#" class="block py-2 text-white hover:text-gray-300 border-b border-gray-500">Video</a>
                         </li>
                         <li>

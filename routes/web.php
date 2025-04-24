@@ -15,9 +15,22 @@ Route::get('/', function () {
     return view('customer.home');
 });
 
-Route::get('/Hidroponik', function () {
-    return view('customer.kategori.hidroponik');
+Route::get('/hidroponik', function () {
+    return view('customer.hidroponik');
 });
+
+Route::get('/hidroponik', [ArtikelController::class, 'showHidroponikArticles']);
+Route::get('/artikel/hidroponik', [ArtikelController::class, 'showArtikelHidroponik'])->name('artikel.hidroponik');
+
+Route::get('/artikel/{slug}', function ($slug) {
+    $artikel = App\Models\Artikel::where('slug', $slug)->firstOrFail();
+    return view('customer.artikel-detail', compact('artikel'));
+})->name('artikel.show');
+
+Route::get('/produk', [ProductController::class, 'index'])->name('produk.index');
+Route::get('/video', [VideoController::class, 'index'])->name('video.index');
+Route::get('/pelatihan', [PelatihanController::class, 'index'])->name('pelatihan.index');
+Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
 
 /*
 |--------------------------------------------------------------------------

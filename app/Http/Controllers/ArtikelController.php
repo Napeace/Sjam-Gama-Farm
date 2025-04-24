@@ -90,4 +90,17 @@ class ArtikelController extends Controller
     {
         return view('mitra.artikel.editor', compact('artikel'));
     }
+
+    public function showHidroponikArticles()
+    {
+        $artikels = Artikel::where('kategori', 'hidroponik')->latest()->get();
+        return view('customer.hidroponik', compact('artikels'));
+    }
+
+    public function showArtikelHidroponik()
+    {
+        $kategori = 'hidroponik'; // Keep this for view compatibility
+        $artikels = Artikel::where('kategori', 'hidroponik')->latest()->paginate(9);
+        return view('customer.artikel-kategori', compact('artikels', 'kategori'));
+    }
 }

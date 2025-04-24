@@ -5,6 +5,7 @@
     <title>@yield('title', 'SJAM GAMA FARM')</title>
     @vite('resources/css/app.css')
     <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tiny.cloud/1/skn71ykaszy2j8ba1bvueseg84bemllqwe5je48my7zayil0/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 
 <body class="bg-white h-screen flex flex-col overflow-hidden">

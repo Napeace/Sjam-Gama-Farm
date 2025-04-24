@@ -2,10 +2,11 @@
 
     <!-- Profil -->
     <div class="flex flex-col items-center">
-        {{-- Gambar Profil --}}
-        <div class="h-16 w-16 rounded-full overflow-hidden mb-2">
-            <img src="{{ asset('images/profile-user.png') }}" alt="Profil" class="object-cover h-full w-full">
-        </div>
+        <a href="{{ route('mitra.DataAkun') }}" class="block">
+            <div class="h-16 w-16 rounded-full overflow-hidden mb-2 hover:opacity-80 transition-opacity">
+                <img src="{{ asset('images/profile-user.png') }}" alt="Profil" class="object-cover h-full w-full">
+            </div>
+        </a>
 
         <p class="text-sm font-semibold">Admin</p>
 
