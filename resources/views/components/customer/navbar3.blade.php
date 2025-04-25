@@ -9,11 +9,11 @@
 
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center space-x-6">
-                <a href="{{ route('produk.index') }}" class="hover:text-green-300 transition duration-200 font-medium">Produk</a>
-                <a href="{{ route('video.index') }}" class="hover:text-green-300 transition duration-200 font-medium">Video</a>
-                <a href="{{ route('pelatihan.index') }}" class="hover:text-green-300 transition duration-200 font-medium">Pelatihan</a>
+                <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Produk</a>
+                <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Video</a>
+                <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Pelatihan</a>
                 <a href="{{ route('artikel.hidroponik') }}" class="hover:text-green-300 transition duration-200 font-medium">Artikel</a>
-                <a href="{{ route('review.index') }}" class="hover:text-green-300 transition duration-200 font-medium">Review</a>
+                <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Review</a>
             </nav>
 
             <!-- Mobile Menu Button -->
@@ -29,11 +29,11 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="md:hidden hidden pb-4">
             <div class="flex flex-col space-y-3">
-                <a href="{{ route('produk.index') }}" class="hover:text-green-300 transition duration-200 py-2">Produk</a>
-                <a href="{{ route('video.index') }}" class="hover:text-green-300 transition duration-200 py-2">Video</a>
-                <a href="{{ route('pelatihan.index') }}" class="hover:text-green-300 transition duration-200 py-2">Pelatihan</a>
+                <a href="#" class="hover:text-green-300 transition duration-200 py-2">Produk</a>
+                <a href="#" class="hover:text-green-300 transition duration-200 py-2">Video</a>
+                <a href="#" class="hover:text-green-300 transition duration-200 py-2">Pelatihan</a>
                 <a href="{{ route('artikel.hidroponik') }}" class="hover:text-green-300 transition duration-200 py-2">Artikel</a>
-                <a href="{{ route('review.index') }}" class="hover:text-green-300 transition duration-200 py-2">Review</a>
+                <a href="#" class="hover:text-green-300 transition duration-200 py-2">Review</a>
             </div>
         </div>
     </div>
