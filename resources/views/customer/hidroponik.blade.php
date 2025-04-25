@@ -1,10 +1,10 @@
-@extends('layouts.customer')
+@extends('customer.components.layouts')
 
 @section('title', 'SJAM GAMA FARM - Hidroponik')
 
 @section('content')
     {{-- Navbar Component --}}
-    <x-customer.navbar2 />
+    @include('customer.components.navbar2')
 
     {{-- Hero Banner Section --}}
     <section class="relative w-full bg-green-700 overflow-hidden">
@@ -242,10 +242,10 @@
     </section>
 
     {{-- Custom Scrollbar Component --}}
-    <x-customer.custom-scroll />
+    @include('customer.components.custom-scroll')
 
-    {{-- Footer Component --}}
-    <x-customer.footer />
+    {{-- Footer --}}
+    @include('customer.components.footer')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

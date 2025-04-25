@@ -1,10 +1,10 @@
-@extends('layouts.customer')
+@extends('customer.components.layouts')
 
 @section('title', 'Artikel ' . ucfirst($kategori) . ' - SJAM GAMA FARM')
 
 @section('content')
     {{-- Navbar Component --}}
-    <x-customer.navbar3 />
+    @include('customer.components.navbar3')
 
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-center text-green-700 mb-8">Artikel {{ ucfirst($kategori) }}</h1>
@@ -31,9 +31,6 @@
                         <p class="text-gray-700 mb-4">
                             Di SJAM GAMA FARM, sistem hidroponik yang kami terapkan telah dirancang agar mudah dioperasikan oleh pemula maupun pelaku usaha pertanian skala menengah. Kami menggunakan rangkaian alat dan nutrisi berkualitas tinggi untuk memastikan pertumbuhan tanaman berjalan optimal dan hasil panen maksimal. Selain itu, kami juga menyediakan pendampingan dan edukasi bagi pelanggan yang ingin mengembangkan sistem hidroponik di rumah maupun dalam skala bisnis.
                         </p>
-                        {{-- <p class="text-gray-700">
-                            Melalui pengembangan sistem hidroponik ini, SJAM GAMA FARM tidak hanya ingin menyediakan hasil pertanian yang sehat dan berkualitas, tetapi juga mendorong masyarakat untuk berperan aktif dalam menciptakan ketahanan pangan secara mandiri. Kami percaya bahwa hidroponik adalah salah satu langkah konkret menuju pertanian masa depan yang berkelanjutan, modern, dan menjangkau semua kalangan.
-                        </p> --}}
                     </div>
                 </div>
             </div>
@@ -83,8 +80,9 @@
     </div>
 
     {{-- Custom Scrollbar Component --}}
-    <x-customer.custom-scroll />
+    @include('customer.components.custom-scroll')
 
-    {{-- Footer Component --}}
-    <x-customer.footer />
+    {{-- Footer --}}
+    @include('customer.components.footer')
+    
 @endsection

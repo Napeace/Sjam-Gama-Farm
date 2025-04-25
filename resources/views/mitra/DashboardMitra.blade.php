@@ -1,4 +1,4 @@
-@extends('layouts.mitra')
+@extends('mitra.components.layouts')
 
 @section('title', 'Dashboard Mitra - SJAM GAMA FARM')
 
@@ -6,7 +6,7 @@
 <div class="flex h-full overflow-hidden" x-data="{ open: false, title: '' }">
 
     <!-- Sidebar -->
-    <x-mitra.sidebar />
+    @include('mitra.components.sidebar')
 
     <!-- Konten Utama -->
     <div class="w-5/6 grid grid-cols-3 grid-rows-2 gap-1 p-1 bg-green-600 h-full">

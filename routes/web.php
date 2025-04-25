@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MitraAuthController;
 use App\Http\Controllers\ArtikelController;
-
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\PelatihanController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +16,6 @@ use App\Http\Controllers\ArtikelController;
 */
 Route::get('/', function () {
     return view('customer.home');
-});
-
-Route::get('/hidroponik', function () {
-    return view('customer.hidroponik');
 });
 
 Route::get('/hidroponik', [ArtikelController::class, 'showHidroponikArticles']);
@@ -49,75 +48,25 @@ Route::post('/LogoutMitra', [MitraAuthController::class, 'logout'])->name('mitra
 |--------------------------------------------------------------------------
 */
 
-// Dashboard
-Route::get('/DashboardMitra', function () {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return view('mitra.DashboardMitra');
-})->name('mitra.dashboard');
+// Dashboard Route dengan middleware mitra.auth
+Route::middleware('mitra.auth')->group(function () {
+    // Dashboard
+    Route::get('/DashboardMitra', function () {
+        return view('mitra.DashboardMitra');
+    })->name('mitra.dashboard');
 
-// Akun routes
-Route::get('/DataAkun', function () {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\MitraAuthController::class)->showAkun();
-})->name('mitra.DataAkun');
+    // Akun routes
+    Route::get('/DataAkun', [MitraAuthController::class, 'showAkun'])->name('mitra.DataAkun');
+    Route::get('/EditAkun', [MitraAuthController::class, 'editAkun'])->name('mitra.EditAkun');
+    Route::put('/updateAkun', [MitraAuthController::class, 'updateAkun'])->name('mitra.updateAkun');
 
-Route::get('/EditAkun', function () {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\MitraAuthController::class)->editAkun();
-})->name('mitra.EditAkun');
-
-Route::put('/updateAkun', function () {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\MitraAuthController::class)->updateAkun(request());
-})->name('mitra.updateAkun');
-
-// Artikel routes
-Route::get('/DashboardMitra/Artikel', function () {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\ArtikelController::class)->index();
-})->name('mitra.artikel.hidroponik');
-
-Route::get('/DashboardMitra/Artikel/create', function () {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\ArtikelController::class)->create();
-})->name('mitra.artikel.create');
-
-Route::post('/DashboardMitra/Artikel', function () {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\ArtikelController::class)->store(request());
-})->name('mitra.artikel.store');
-
-Route::get('/DashboardMitra/Artikel/{artikel}/edit', function (App\Models\Artikel $artikel) {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\ArtikelController::class)->edit($artikel);
-})->name('mitra.artikel.edit');
-
-Route::put('/DashboardMitra/Artikel/{artikel}', function (App\Models\Artikel $artikel) {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\ArtikelController::class)->update(request(), $artikel);
-})->name('mitra.artikel.update');
-
-Route::delete('/DashboardMitra/Artikel/{artikel}', function (App\Models\Artikel $artikel) {
-    if (!Auth::check()) {
-        return redirect('/LoginMitra');
-    }
-    return app(\App\Http\Controllers\ArtikelController::class)->destroy($artikel);
-})->name('mitra.artikel.destroy');
+    // Artikel routes
+    Route::prefix('DashboardMitra')->group(function () {
+        Route::get('/Artikel', [ArtikelController::class, 'index'])->name('mitra.artikel.hidroponik');
+        Route::get('/Artikel/create', [ArtikelController::class, 'create'])->name('mitra.artikel.create');
+        Route::post('/Artikel', [ArtikelController::class, 'store'])->name('mitra.artikel.store');
+        Route::get('/Artikel/{artikel}/edit', [ArtikelController::class, 'edit'])->name('mitra.artikel.edit');
+        Route::put('/Artikel/{artikel}', [ArtikelController::class, 'update'])->name('mitra.artikel.update');
+        Route::delete('/Artikel/{artikel}', [ArtikelController::class, 'destroy'])->name('mitra.artikel.destroy');
+    });
+});

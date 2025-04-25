@@ -1,10 +1,10 @@
-@extends('layouts.customer')
+@extends('customer.components.layouts')
 
 @section('title', $artikel->judul . ' - SJAM GAMA FARM')
 
 @section('content')
     {{-- Navbar Component --}}
-    <x-customer.navbar1 />
+    @include('customer.components.navbar1')
 
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
@@ -34,8 +34,9 @@
     </div>
 
     {{-- Custom Scrollbar Component --}}
-    <x-customer.custom-scroll />
+    @include('customer.components.custom-scroll')
 
-    {{-- Footer Component --}}
-    <x-customer.footer />
+    {{-- Footer --}}
+    @include('customer.components.footer')
+    
 @endsection

@@ -1,4 +1,4 @@
-@extends('layouts.mitra')
+@extends('mitra.components.layouts')
 
 @section('title', 'Login Mitra - SJAM GAMA FARM')
 

@@ -1,4 +1,4 @@
-@extends('layouts.mitra')
+@extends('mitra.components.layouts')
 
 @section('title', 'Artikel Hidroponik - SJAM GAMA FARM')
 
@@ -6,7 +6,7 @@
 <div class="flex h-full overflow-hidden">
 
     <!-- Sidebar -->
-    <x-mitra.sidebar />
+    @include('mitra.components.sidebar')
 
     <!-- Konten Artikel -->
     <div class="w-5/6 bg-gray-100 p-6 overflow-y-auto">

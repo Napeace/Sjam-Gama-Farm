@@ -1,10 +1,10 @@
-@extends('layouts.customer')
+@extends('customer.components.layouts')
 
 @section('title', 'SJAM GAMA FARM - Beranda')
 
 @section('content')
     {{-- Navbar Component --}}
-    <x-customer.navbar1 />
+    @include('customer.components.navbar1')
 
     {{-- Hero Section --}}
     <section class="relative h-screen flex flex-col items-center justify-center overflow-hidden" id="hero">
@@ -74,15 +74,14 @@
                 ],
             ];
         @endphp
-
-        <x-customer.carousel :categories="$categories" />
+        @include('customer.components.carousel', ['categories' => $categories])
     </section>
 
     {{-- Footer --}}
-    <x-customer.footer />
+    @include('customer.components.footer')
 
     {{-- Custom Scrollbar Component --}}
-    <x-customer.custom-scroll />
+    @include('customer.components.custom-scroll')
 
     <script>
         function scrollToSection() {
