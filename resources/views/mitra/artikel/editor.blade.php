@@ -1,15 +1,12 @@
 @extends('mitra.components.layouts')
-
 @section('title', isset($artikel) ? 'Edit Artikel - SJAM GAMA FARM' : 'Tambah Artikel - SJAM GAMA FARM')
-
 @section('content')
 <div class="flex h-full overflow-hidden">
-
     <!-- Sidebar -->
     @include('mitra.components.sidebar')
 
     <!-- Konten Editor -->
-    <div class="w-5/6 bg-gray-100 p-6 overflow-y-auto">
+    <div id="mainContent" class="flex-1 bg-gray-100 p-6 overflow-y-auto">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">
                 {{ isset($artikel) ? 'Edit Artikel' : 'Tambah Artikel Baru' }}
@@ -22,47 +19,45 @@
         <!-- Form Editor -->
         <div class="bg-white rounded-lg shadow-md p-6">
             <form action="{{ isset($artikel) ? route('mitra.artikel.update', $artikel) : route('mitra.artikel.store') }}"
-                  method="POST"
-                  enctype="multipart/form-data"
-                  id="artikelForm">
+                method="POST"
+                enctype="multipart/form-data"
+                id="artikelForm">
                 @csrf
                 @if(isset($artikel))
-                    @method('PUT')
+                @method('PUT')
                 @endif
 
                 <!-- Judul -->
                 <div class="mb-4">
                     <label for="judul" class="block text-gray-700 font-medium mb-2">Judul</label>
                     <input type="text"
-                           id="judul"
-                           name="judul"
-                           autocomplete="off"
-                           class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                           value="{{ isset($artikel) ? $artikel->judul : old('judul') }}"
-                           required>
+                        id="judul"
+                        name="judul"
+                        autocomplete="off"
+                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        value="{{ isset($artikel) ? $artikel->judul : old('judul') }}"
+                        required>
                     @error('judul')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Upload Gambar -->
                 <div class="mb-4">
                     <label for="gambar" class="block text-gray-700 font-medium mb-2">Gambar Cover</label>
-
                     <!-- Preview gambar -->
                     <div class="mb-3" id="image-preview-container">
                         @if(isset($artikel) && $artikel->gambar)
-                            <img src="{{ asset('storage/' . $artikel->gambar) }}" alt="Preview" class="w-40 h-auto rounded mb-2" id="image-preview">
+                        <img src="{{ asset('storage/' . $artikel->gambar) }}" alt="Preview" class="w-40 h-auto rounded mb-2" id="image-preview">
                         @else
-                            <img src="" alt="Preview" class="w-40 h-auto rounded mb-2 hidden" id="image-preview">
+                        <img src="" alt="Preview" class="w-40 h-auto rounded mb-2 hidden" id="image-preview">
                         @endif
                         <p class="text-sm text-gray-500 mt-1" id="preview-text">
                             @if(isset($artikel) && $artikel->gambar)
-                                Upload gambar baru untuk mengganti
+                            Upload gambar baru untuk mengganti
                             @endif
                         </p>
                     </div>
-
                     <div class="flex items-center">
                         <label for="gambar" class="cursor-pointer bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -74,12 +69,11 @@
                             id="gambar"
                             name="gambar"
                             class="hidden"
-                            accept="image/*"
-                            onchange="displayFileName(this)">
+                            accept="image/*">
                         <span id="file-name" class="ml-3 text-gray-600 text-sm">Belum ada file dipilih</span>
                     </div>
                     @error('gambar')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -87,12 +81,12 @@
                 <div class="mb-6">
                     <label for="isi" class="block text-gray-700 font-medium mb-2">Konten</label>
                     <textarea id="isi"
-                            name="isi"
-                            rows="15"
-                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            required>{{ isset($artikel) ? $artikel->isi : old('isi') }}</textarea>
+                        name="isi"
+                        rows="15"
+                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required>{{ isset($artikel) ? $artikel->isi : old('isi') }}</textarea>
                     @error('isi')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -107,21 +101,57 @@
     </div>
 </div>
 
-<!-- TinyMCE Editor -->
+@push('scripts')
+<script src="https://cdn.tiny.cloud/1/skn71ykaszy2j8ba1bvueseg84bemllqwe5je48my7zayil0/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function() {
+            setTimeout(function() {
+                adjustLayout();
+            }, 50);
+        });
+    }
+
+    function adjustLayout() {
+        const isSidebarExpanded = sidebar && !sidebar.classList.contains('sidebar-collapsed');
+        const viewportWidth = window.innerWidth;
+
+        // Sesuaikan lebar konten berdasarkan status sidebar
+        if (isSidebarExpanded) {
+            mainContent.classList.remove('w-5/6');
+            mainContent.classList.add('w-4/6');
+        } else {
+            mainContent.classList.remove('w-4/6');
+            mainContent.classList.add('w-5/6');
+        }
+
+        // Sesuaikan ukuran form untuk layar kecil
+        if (viewportWidth < 640) {
+            const form = document.querySelector('#artikelForm');
+            form.classList.remove('w-full');
+            form.classList.add('w-full');
+        }
+    }
+
+    adjustLayout();
+    window.addEventListener('resize', adjustLayout);
+
+    // Inisialisasi TinyMCE
     tinymce.init({
         selector: '#isi',
-        // Hanya gunakan plugin inti yang gratis
         plugins: [
             'anchor', 'autolink', 'charmap', 'codesample', 'emoticons',
             'image', 'link', 'lists', 'media', 'searchreplace',
             'table', 'visualblocks', 'wordcount', 'code', 'fullscreen', 'preview'
         ],
         toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | ' +
-                'link image media table | code fullscreen preview | ' +
-                'align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-        // Pengaturan tambahan untuk meningkatkan pengalaman
+                 'link image media table | code fullscreen preview | ' +
+                 'align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         height: 500,
         menubar: true,
         branding: false,
@@ -129,10 +159,8 @@
         relative_urls: false,
         remove_script_host: false,
         convert_urls: true,
-        // Image upload handling (opsional)
         images_upload_handler: function (blobInfo, progress) {
             return new Promise((resolve, reject) => {
-                // Untuk development, bisa pakai URL data saja
                 const reader = new FileReader();
                 reader.onload = function () {
                     resolve(reader.result);
@@ -140,14 +168,11 @@
                 reader.readAsDataURL(blobInfo.blob());
             });
         },
-        // Basic template untuk memudahkan pengguna
         templates: [
             { title: 'Template artikel', description: 'Template dasar untuk artikel', content: '<h2>Judul Bagian</h2><p>Isi paragraf artikel...</p>' }
         ],
-        // Fallback untuk pesan error TinyMCE tentang domain
         setup: function(editor) {
             editor.on('init', function() {
-                // Menghapus pesan domain tidak terdaftar jika ada
                 const noticeElements = document.querySelectorAll('.tox-notification');
                 noticeElements.forEach(function(notice) {
                     if (notice.textContent.includes('domain is not registered')) {
@@ -158,37 +183,32 @@
         }
     });
 
-    // Event handler untuk tombol submit (tetap seperti sebelumnya)
+    // Event handler untuk tombol submit
     document.getElementById('submitArtikel').addEventListener('click', function() {
         tinymce.triggerSave();
-        console.log('Judul:', document.querySelector('#judul').value);
-        console.log('Isi:', document.querySelector('#isi').value);
         document.getElementById('artikelForm').submit();
     });
-});
 
     // Fungsi untuk preview gambar
-    function displayFileName(input) {
-        const fileName = input.files[0]?.name;
+    const fileInput = document.getElementById('gambar');
+    fileInput.addEventListener('change', function() {
+        const fileName = this.files[0]?.name;
         document.getElementById('file-name').textContent = fileName || 'Belum ada file dipilih';
 
-        // Preview gambar
-        if (input.files && input.files[0]) {
+        if (this.files && this.files[0]) {
             const reader = new FileReader();
             const imagePreview = document.getElementById('image-preview');
             const previewText = document.getElementById('preview-text');
-
+            
             reader.onload = function(e) {
-                // Tampilkan gambar preview
                 imagePreview.src = e.target.result;
                 imagePreview.classList.remove('hidden');
-
-                // Update teks
                 previewText.textContent = 'Preview gambar yang akan diunggah';
             }
-
-            reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(this.files[0]);
         }
-    }
+    });
+});
 </script>
+@endpush
 @endsection

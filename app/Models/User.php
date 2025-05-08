@@ -23,6 +23,9 @@ class User extends Authenticatable
         'username',
         'password',
         'nama_mitra',
+        'alamat',
+        'no_hp',
+        'email',
     ];
 
     /**
@@ -46,9 +49,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     public function username()
     {
         return 'username';
     }
-
 }

@@ -16,7 +16,7 @@
                 </div>
             @endif
 
-            <form action="/LoginMitra" method="POST" class="space-y-6">
+            <form action="/login-mitra" method="POST" class="space-y-6">
                 @csrf
                 <div>
                     <label class="block mb-1 text-sm text-gray-700">Username :</label>

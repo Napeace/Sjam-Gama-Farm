@@ -2,10 +2,10 @@
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between py-3">
             <!-- Logo and Brand -->
-            <div class="flex items-center gap-2">
+            <a href="/" class="flex items-center gap-2">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-8 rounded-full">
                 <span class="font-semibold text-lg">SJAM GAMA FARM</span>
-            </div>
+            </a>
 
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center space-x-6">
@@ -72,7 +72,7 @@
 
                     if (targetElement) {
                         // Scroll with offset for the sticky header
-                        const headerOffset = 80;
+                        const headerOffset = 50;
                         const elementPosition = targetElement.getBoundingClientRect().top;
                         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 

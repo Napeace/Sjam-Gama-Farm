@@ -20,7 +20,7 @@
                     <span>Kategori: {{ ucfirst($artikel->kategori) }}</span>
                 </div>
 
-                <div class="prose max-w-none">
+                <div class="article-content max-w-none">
                     {!! $artikel->isi !!}
                 </div>
 

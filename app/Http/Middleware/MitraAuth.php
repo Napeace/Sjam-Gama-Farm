@@ -17,7 +17,7 @@ class MitraAuth
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            return redirect('/LoginMitra');
+            return redirect('/login-mitra');
         }
 
         return $next($request);

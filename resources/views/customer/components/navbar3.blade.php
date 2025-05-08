@@ -2,14 +2,14 @@
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between py-3">
             <!-- Logo and Brand -->
-            <div class="flex items-center gap-2">
+            <a href="/hidroponik" class="flex items-center gap-2">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-8 rounded-full">
-                <a href="/" class="font-semibold text-lg">SJAM GAMA FARM</a>
-            </div>
+                <span class="font-semibold text-lg">SJAM GAMA FARM</span>
+            </a>
 
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center space-x-6">
-                <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Produk</a>
+                <a href="{{ route('produk.index') }}" class="hover:text-green-300 transition duration-200 font-medium">Produk</a>
                 <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Video</a>
                 <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Pelatihan</a>
                 <a href="{{ route('artikel.hidroponik') }}" class="hover:text-green-300 transition duration-200 font-medium">Artikel</a>
@@ -29,7 +29,7 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="md:hidden hidden pb-4">
             <div class="flex flex-col space-y-3">
-                <a href="#" class="hover:text-green-300 transition duration-200 py-2">Produk</a>
+                <a href="{{ route('produk.index') }}" class="hover:text-green-300 transition duration-200 py-2">Produk</a>
                 <a href="#" class="hover:text-green-300 transition duration-200 py-2">Video</a>
                 <a href="#" class="hover:text-green-300 transition duration-200 py-2">Pelatihan</a>
                 <a href="{{ route('artikel.hidroponik') }}" class="hover:text-green-300 transition duration-200 py-2">Artikel</a>

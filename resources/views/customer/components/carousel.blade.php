@@ -1,3 +1,4 @@
+<!-- Enhanced 3D Carousel without Progress Indicator -->
 <div class="relative w-full overflow-hidden bg-white h-screen flex flex-col" data-carousel="agroindustry">
     <div class="container mx-auto px-4 flex-grow flex items-center justify-center">
         <!-- 3D Carousel container - made larger -->
@@ -16,7 +17,7 @@
                             alt="{{ $category['name'] ?? '' }}"
                             class="object-cover"
                         />
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-900/90 via-green-800/70 to-transparent p-4 text-white">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-900/60 via-green-800/40 to-transparent p-4 text-white">
                             <h3 class="text-2xl font-bold">{{ $category['name'] ?? '' }}</h3>
                             <p class="mt-2 flex items-center text-green-100">
                                 Selengkapnya
@@ -30,7 +31,7 @@
                 @endforeach
             </div>
 
-            <!-- Updated navigation arrows with green circles and white arrows -->
+            <!-- Navigation arrows with green circles and white arrows -->
             <button type="button" class="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 cursor-pointer transition-all z-20">
                 <div class="relative w-10 h-10 bg-green-600 hover:bg-green-700 rounded-full shadow-lg">
                     <span class="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white">&lt;</span>
@@ -42,7 +43,7 @@
                 </div>
             </button>
 
-            <!-- Indicators - Updated to show all indicators -->
+            <!-- Indicators -->
             <div class="absolute -bottom-4 left-0 right-0 flex justify-center space-x-2 py-4 z-20">
                 @foreach($categories as $index => $category)
                 <button type="button" class="carousel-indicator h-2 w-8 rounded-full transition-all hover:cursor-pointer"
@@ -53,7 +54,7 @@
     </div>
 </div>
 
-<!-- Add a toast notification system for unavailable categories -->
+<!-- Toast notification system for unavailable categories -->
 <div id="categoryNotification" class="fixed top-20 right-0 z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
     <div class="bg-white rounded-l-lg shadow-lg p-4 border-l-4 border-green-600 flex items-center">
         <div class="text-green-600 mr-3">
@@ -87,6 +88,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentIndex = 0;
         let isAnimating = false;
 
+        // Auto-advance timer settings
+        const autoAdvanceDelay = 6000; // 6 seconds between slides
+        let autoAdvanceTimer = null;
+
         // Set initial positions
         function initCarousel() {
             items.forEach((item, index) => {
@@ -94,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const img = item.querySelector('img');
                 const cardDiv = item.querySelector('div');
 
-                // Pastikan semua card memiliki overflow hidden
+                // Ensure all cards have overflow hidden
                 cardDiv.style.overflow = 'hidden';
 
                 // Main active item dimensions
@@ -105,24 +110,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     img.style.width = '250px';
                     img.style.height = '350px';
                 }
-
-                // Calculate position
-                positionItems();
             });
+
+            // Calculate position
+            positionItems();
 
             // Set initial indicator states
             updateIndicators();
+
+            // Start auto-advance timer
+            startAutoAdvance();
         }
 
         // Position items in a carousel with side previews
         function positionItems() {
-            // Reset all items first - pastikan semua item tidak terlihat dulu
+            // Reset all items first - make sure all items are not visible first
             items.forEach(item => {
                 item.style.opacity = '0';
                 item.style.zIndex = '0';
                 item.style.transform = 'scale(0.5)';
-                // Tambahkan overflow hidden untuk mencegah bagian card terlihat di belakang
+                // Add overflow hidden to prevent card parts from being visible behind
                 item.querySelector('div').style.overflow = 'hidden';
+                item.style.filter = 'brightness(1)';
             });
 
             // Calculate indices for all visible positions
@@ -132,16 +141,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const rightIndex1 = (currentIndex + 1) % totalItems;
             const rightIndex2 = (currentIndex + 2) % totalItems;
 
-            // PENDEKATAN BARU: Ganti urutan pemanggilan untuk memastikan penumpukan yang tepat
-            // Kita posisikan item belakang terlebih dahulu, kemudian item yang di depannya
+            // Position elements from back to front to ensure proper stacking
 
-            // 1. Posisikan kartu PALING BELAKANG dahulu (z-index terendah)
+            // 1. Position rearmost cards first (lowest z-index)
             // Position second item to the right (even smaller, more dimmed)
             const rightItem2 = items[rightIndex2];
             const rightImg2 = rightItem2.querySelector('img');
-            rightItem2.style.left = '80%';  // Disesuaikan untuk overlap
+            rightItem2.style.left = '80%';  // Adjusted for overlap
             rightItem2.style.transform = 'translateX(-50%) scale(0.7)';
-            rightItem2.style.zIndex = '10'; // z-index paling rendah
+            rightItem2.style.zIndex = '10'; // Lowest z-index
             rightItem2.style.opacity = '0.4';
             rightItem2.style.filter = 'brightness(0.6)';
             rightImg2.style.width = '230px';
@@ -150,21 +158,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Position second item to the left (even smaller, more dimmed)
             const leftItem2 = items[leftIndex2];
             const leftImg2 = leftItem2.querySelector('img');
-            leftItem2.style.left = '20%';  // Disesuaikan untuk overlap
+            leftItem2.style.left = '20%';  // Adjusted for overlap
             leftItem2.style.transform = 'translateX(-50%) scale(0.7)';
-            leftItem2.style.zIndex = '10'; // z-index paling rendah
+            leftItem2.style.zIndex = '10'; // Lowest z-index
             leftItem2.style.opacity = '0.4';
             leftItem2.style.filter = 'brightness(0.6)';
             leftImg2.style.width = '230px';
             leftImg2.style.height = '330px';
 
-            // 2. Posisikan kartu TENGAH KEDUA (z-index tengah)
+            // 2. Position middle secondary cards (medium z-index)
             // Position first item to the right (slightly smaller, dimmed)
             const rightItem1 = items[rightIndex1];
             const rightImg1 = rightItem1.querySelector('img');
             rightItem1.style.left = '68%';
             rightItem1.style.transform = 'translateX(-50%) scale(0.85)';
-            rightItem1.style.zIndex = '20'; // z-index tengah
+            rightItem1.style.zIndex = '20'; // Medium z-index
             rightItem1.style.opacity = '0.7';
             rightItem1.style.filter = 'brightness(0.7)';
             rightImg1.style.width = '280px';
@@ -175,30 +183,36 @@ document.addEventListener('DOMContentLoaded', function() {
             const leftImg1 = leftItem1.querySelector('img');
             leftItem1.style.left = '32%';
             leftItem1.style.transform = 'translateX(-50%) scale(0.85)';
-            leftItem1.style.zIndex = '20'; // z-index tengah
+            leftItem1.style.zIndex = '20'; // Medium z-index
             leftItem1.style.opacity = '0.7';
             leftItem1.style.filter = 'brightness(0.7)';
             leftImg1.style.width = '280px';
             leftImg1.style.height = '380px';
 
-            // 3. Posisikan kartu TENGAH (z-index tertinggi)
+            // 3. Position center card (highest z-index)
             // Position main item (center, full size)
             const mainItem = items[mainIndex];
             const mainImg = mainItem.querySelector('img');
             mainItem.style.left = '50%';
             mainItem.style.transform = 'translateX(-50%) scale(1)';
-            mainItem.style.zIndex = '30'; // z-index tertinggi
+            mainItem.style.zIndex = '30'; // Highest z-index
             mainItem.style.opacity = '1';
             mainImg.style.width = '400px';
             mainImg.style.height = '500px';
 
-            // Tambahan: Efek shadow yang lebih jelas untuk memperjelas batas antar card
+            // Additional: Clearer shadow effect to define card boundaries
             items.forEach(item => {
                 const cardDiv = item.querySelector('div');
                 cardDiv.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.3)';
 
-                // Tambahkan overlay transparan di sisi untuk memastikan card di depannya menutupi
+                // Add transparent overlay on sides to ensure front card covers it
                 if (item !== mainItem) {
+                    // Remove any existing overlay first
+                    const existingOverlay = cardDiv.querySelector('.card-overlay');
+                    if (existingOverlay) {
+                        existingOverlay.remove();
+                    }
+
                     const overlay = document.createElement('div');
                     overlay.style.position = 'absolute';
                     overlay.style.top = '0';
@@ -207,35 +221,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     overlay.style.bottom = '0';
                     overlay.style.background = 'rgba(0,0,0,0.05)';
                     overlay.style.zIndex = '5';
-
-                    // Hapus overlay yang mungkin sudah ada sebelumnya
-                    const existingOverlay = cardDiv.querySelector('.card-overlay');
-                    if (existingOverlay) {
-                        existingOverlay.remove();
-                    }
-
                     overlay.classList.add('card-overlay');
                     cardDiv.appendChild(overlay);
                 }
             });
 
-            // Tambahan: Mengatur width yang lebih lebar untuk item di tengah
-            // dan memastikan item lainnya ter-crop dengan benar
+            // Additional: Set wider width for center item
+            // and ensure other items are properly cropped
             mainItem.style.width = '400px';
             leftItem1.style.width = '280px';
             rightItem1.style.width = '280px';
             leftItem2.style.width = '230px';
             rightItem2.style.width = '230px';
 
-            // Mengatur padding antar card dengan jarak yang lebih tepat
-            const spacing = 5; // Spacing dalam pixel
+            // Set proper spacing between cards
+            const spacing = 5; // Spacing in pixels
             rightItem1.style.left = `calc(50% + ${200 + spacing}px)`;
             leftItem1.style.left = `calc(50% - ${200 + spacing}px)`;
             rightItem2.style.left = `calc(50% + ${340 + spacing*2}px)`;
             leftItem2.style.left = `calc(50% - ${340 + spacing*2}px)`;
         }
 
-        // The rest of the JavaScript remains the same
         // Update indicators
         function updateIndicators() {
             indicators.forEach((indicator, index) => {
@@ -249,10 +255,31 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        // Start auto-advance timer
+        function startAutoAdvance() {
+            // Clear any existing timer
+            if (autoAdvanceTimer) {
+                clearTimeout(autoAdvanceTimer);
+            }
+
+            // Set timer for auto-advance
+            autoAdvanceTimer = setTimeout(() => {
+                if (!isAnimating) {
+                    updateCarousel(currentIndex + 1);
+                }
+            }, autoAdvanceDelay);
+        }
+
         // Update the carousel display
         function updateCarousel(newIndex) {
             if (isAnimating) return;
             isAnimating = true;
+
+            // Cancel current auto-advance timer
+            if (autoAdvanceTimer) {
+                clearTimeout(autoAdvanceTimer);
+                autoAdvanceTimer = null;
+            }
 
             currentIndex = (newIndex + totalItems) % totalItems;
 
@@ -261,6 +288,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Update indicators
             updateIndicators();
+
+            // Start new auto-advance timer
+            startAutoAdvance();
 
             // Reset animation lock after transition
             setTimeout(() => {
@@ -320,17 +350,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Auto-advance the carousel
-        let interval;
-
-        function startAutoAdvance() {
-            interval = setInterval(() => {
-                updateCarousel(currentIndex + 1);
-            }, 6000);
+        function stopAutoAdvance() {
+            // Clear any existing timer
+            if (autoAdvanceTimer) {
+                clearTimeout(autoAdvanceTimer);
+                autoAdvanceTimer = null;
+            }
         }
 
-        function stopAutoAdvance() {
-            clearInterval(interval);
+        function resumeAutoAdvance() {
+            // Start a new timer
+            startAutoAdvance();
         }
 
         // Pause auto-advance on hover or touch
@@ -338,9 +368,9 @@ document.addEventListener('DOMContentLoaded', function() {
         carousel.addEventListener('touchstart', stopAutoAdvance);
 
         // Resume auto-advance when mouse leaves
-        carousel.addEventListener('mouseleave', startAutoAdvance);
+        carousel.addEventListener('mouseleave', resumeAutoAdvance);
         carousel.addEventListener('touchend', () => {
-            setTimeout(startAutoAdvance, 1000);
+            setTimeout(resumeAutoAdvance, 1000);
         });
 
         // Make carousel items clickable to navigate to their pages

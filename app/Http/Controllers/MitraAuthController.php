@@ -11,7 +11,7 @@ class MitraAuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('mitra.LoginMitra');
+        return view('mitra.login-mitra');
     }
 
     public function login(Request $request)
@@ -20,7 +20,7 @@ class MitraAuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/DashboardMitra');
+            return redirect()->intended('/dashboard-mitra');
         }
 
         return back()->withErrors(['login_error' => 'Username atau password salah']);
@@ -29,19 +29,19 @@ class MitraAuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/LoginMitra');
+        return redirect('/login-mitra');
     }
 
     public function showAkun()
     {
         $user = Auth::user();
-        return view('mitra.DataAkun', compact('user'));
+        return view('mitra.data-akun', compact('user'));
     }
 
     public function editAkun()
     {
         $user = Auth::user();
-        return view('mitra.EditAkun', compact('user'));
+        return view('mitra.edit-akun', compact('user'));
     }
 
     public function updateAkun(Request $request)
@@ -53,28 +53,14 @@ class MitraAuthController extends Controller
             'email' => 'required|email|max:255',
         ]);
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Update the user data
+        // Use direct property assignment
         $user->username = $request->username_baru;
         $user->alamat = $request->alamat;
         $user->no_hp = $request->no_hp;
         $user->email = $request->email;
-
-        // Optional password update
-        if ($request->filled('password_lama') && $request->filled('password_baru')) {
-            $request->validate([
-                'password_lama' => 'required|string',
-                'password_baru' => 'required|string|min:8',
-            ]);
-
-            // Verify the old password
-            if (!Hash::check($request->password_lama, $user->password)) {
-                return back()->withErrors(['password_lama' => 'Password lama tidak sesuai']);
-            }
-
-            $user->password = Hash::make($request->password_baru);
-        }
 
         $user->save();
 
