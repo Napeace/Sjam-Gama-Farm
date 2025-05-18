@@ -9,6 +9,8 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\PelatihanController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\HidroponikController;
+use App\Http\Controllers\NotificationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,16 @@ Route::get('/produk', [ProductController::class, 'publicIndex'])->name('produk.i
 Route::get('/video', [VideoController::class, 'index'])->name('video.index');
 Route::get('/pelatihan', [PelatihanController::class, 'index'])->name('pelatihan.index');
 Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
+
+Route::prefix('notifications')->group(function () {
+    Route::get('/', [NotificationController::class, 'index']);
+    Route::post('/subscribe', [NotificationController::class, 'subscribe']);
+    Route::post('/unsubscribe', [NotificationController::class, 'unsubscribe']);
+    Route::get('/check-subscription', [NotificationController::class, 'checkSubscription']);
+    Route::post('/{id}/mark-read', [NotificationController::class, 'markAsRead']);
+    Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead']);
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -90,5 +102,8 @@ Route::middleware('mitra.auth')->group(function () {
         Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('mitra.reviews.edit');
         Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('mitra.reviews.update');
         Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('mitra.reviews.destroy');
+
+        // Notification routes
+        Route::post('/send', [NotificationController::class, 'send']);
     });
 });
