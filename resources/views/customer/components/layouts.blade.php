@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'SJAM GAMA FARM')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
     @vite('resources/css/app.css')
+    <!-- Use a specific version of Alpine.js from CDN for more reliability -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
+    <!-- Load app.js after Alpine is loaded -->
     @vite('resources/js/app.js')
-    <script src="//unpkg.com/alpinejs" defer></script>
     <style>
         ::-webkit-scrollbar {
             display: none;

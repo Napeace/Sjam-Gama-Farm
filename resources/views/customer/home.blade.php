@@ -1,6 +1,6 @@
 @extends('customer.components.layouts')
 
-@section('title', 'SJAM GAMA FARM - Perkebunan Organik Unggulan')
+@section('title', 'SJAM GAMA FARM')
 
 @section('content')
     {{-- Navbar Component --}}

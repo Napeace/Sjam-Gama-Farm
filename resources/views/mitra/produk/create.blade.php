@@ -30,12 +30,33 @@
                         @csrf
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {{-- Tipe Produk --}}
+                            <div class="col-span-1 md:col-span-2">
+                                <label for="tipe_produk" class="block text-sm font-medium text-gray-700 mb-2">Tipe Produk</label>
+                                <div class="flex space-x-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="tipe_produk" value="SAYUR"
+                                               {{ old('tipe_produk', 'SAYUR') == 'SAYUR' ? 'checked' : '' }}
+                                               class="form-radio text-green-600 focus:ring-green-500"
+                                               onchange="toggleProductType()">
+                                        <span class="ml-2 text-sm font-medium text-gray-700">Sayur Hidroponik</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="tipe_produk" value="ALAT"
+                                               {{ old('tipe_produk') == 'ALAT' ? 'checked' : '' }}
+                                               class="form-radio text-green-600 focus:ring-green-500"
+                                               onchange="toggleProductType()">
+                                        <span class="ml-2 text-sm font-medium text-gray-700">Alat Hidroponik</span>
+                                    </label>
+                                </div>
+                            </div>
+
                             {{-- Foto Produk --}}
                             <div class="col-span-1 md:col-span-2">
                                 <label for="gambar" class="block text-sm font-medium text-gray-700 mb-2">Foto Produk</label>
                                 <div class="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
                                     <div id="preview-container" class="hidden mb-4">
-                                        <img id="preview-image" src="#" alt="Preview" class="mx-auto h-40 object-cover">
+                                        <img id="preview-image" src="#" alt="Preview" class="mx-auto h-40 object-cover rounded">
                                     </div>
                                     <label for="gambar" class="cursor-pointer block">
                                         <div class="flex justify-center px-6 pt-5 pb-6">
@@ -55,62 +76,92 @@
                             {{-- Nama Produk --}}
                             <div>
                                 <label for="nama" class="block text-sm font-medium text-gray-700">Nama Produk</label>
-                                <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                                <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
                             </div>
 
                             {{-- Harga --}}
                             <div>
-                                <label for="harga" class="block text-sm font-medium text-gray-700">Harga (Rp/kg)</label>
+                                <label for="harga" class="block text-sm font-medium text-gray-700">
+                                    <span id="harga-label">Harga (Rp/kg)</span>
+                                </label>
                                 <div class="relative mt-1">
                                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">Rp</span>
-                                    <input type="number" name="harga" id="harga" value="{{ old('harga') }}" required class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                                    <input type="number" name="harga" id="harga" value="{{ old('harga') }}" required min="0"
+                                           class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
                                 </div>
                             </div>
 
                             {{-- Deskripsi --}}
                             <div class="col-span-1 md:col-span-2">
                                 <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-                                <textarea name="deskripsi" id="deskripsi" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">{{ old('deskripsi') }}</textarea>
+                                <textarea name="deskripsi" id="deskripsi" rows="4" required
+                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">{{ old('deskripsi') }}</textarea>
                             </div>
 
-                            {{-- Status Booking --}}
-                            <div>
-                                <label for="status_booking" class="block text-sm font-medium text-gray-700">Status Booking</label>
-                                <select name="status_booking" id="status_booking" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
-                                    <option value="MENERIMA" {{ old('status_booking') == 'MENERIMA' ? 'selected' : '' }}>MENERIMA</option>
-                                    <option value="FULL BOOKED" {{ old('status_booking') == 'FULL BOOKED' ? 'selected' : '' }}>FULL BOOKED</option>
-                                </select>
+                            {{-- Fields untuk Sayur --}}
+                            <div id="sayur-fields" class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {{-- Status Booking --}}
+                                <div>
+                                    <label for="status_booking" class="block text-sm font-medium text-gray-700">Status Booking</label>
+                                    <select name="status_booking" id="status_booking"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                                        <option value="MENERIMA" {{ old('status_booking') == 'MENERIMA' ? 'selected' : '' }}>MENERIMA</option>
+                                        <option value="FULL BOOKED" {{ old('status_booking') == 'FULL BOOKED' ? 'selected' : '' }}>FULL BOOKED</option>
+                                    </select>
+                                </div>
+
+                                {{-- Status Stok --}}
+                                <div>
+                                    <label for="status_stok" class="block text-sm font-medium text-gray-700">Status Stok</label>
+                                    <select name="status_stok" id="status_stok"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                                        <option value="TERSEDIA" {{ old('status_stok') == 'TERSEDIA' ? 'selected' : '' }}>TERSEDIA</option>
+                                        <option value="TIDAK TERSEDIA" {{ old('status_stok') == 'TIDAK TERSEDIA' ? 'selected' : '' }}>TIDAK TERSEDIA</option>
+                                    </select>
+                                </div>
+
+                                {{-- Tanggal Tanam --}}
+                                <div>
+                                    <label for="tanggal_tanam" class="block text-sm font-medium text-gray-700">Tanggal Tanam</label>
+                                    <input type="date" name="tanggal_tanam" id="tanggal_tanam" value="{{ old('tanggal_tanam') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                                </div>
+
+                                {{-- Prediksi Panen --}}
+                                <div>
+                                    <label for="prediksi_panen" class="block text-sm font-medium text-gray-700">Prediksi Panen</label>
+                                    <input type="date" name="prediksi_panen" id="prediksi_panen" value="{{ old('prediksi_panen') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                                </div>
                             </div>
 
-                            {{-- Status Stok --}}
-                            <div>
-                                <label for="status_stok" class="block text-sm font-medium text-gray-700">Status Stok</label>
-                                <select name="status_stok" id="status_stok" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
-                                    <option value="TERSEDIA" {{ old('status_stok') == 'TERSEDIA' ? 'selected' : '' }}>TERSEDIA</option>
-                                    <option value="TIDAK TERSEDIA" {{ old('status_stok') == 'TIDAK TERSEDIA' ? 'selected' : '' }}>TIDAK TERSEDIA</option>
-                                </select>
-                            </div>
-
-                            {{-- Tanggal Tanam --}}
-                            <div>
-                                <label for="tanggal_tanam" class="block text-sm font-medium text-gray-700">Tanggal Tanam</label>
-                                <input type="date" name="tanggal_tanam" id="tanggal_tanam" value="{{ old('tanggal_tanam') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
-                            </div>
-
-                            {{-- Prediksi Panen --}}
-                            <div>
-                                <label for="prediksi_panen" class="block text-sm font-medium text-gray-700">Prediksi Panen</label>
-                                <input type="date" name="prediksi_panen" id="prediksi_panen" value="{{ old('prediksi_panen') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                            {{-- Fields untuk Alat --}}
+                            <div id="alat-fields" class="col-span-1 md:col-span-2 hidden">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {{-- Stok --}}
+                                    <div>
+                                        <label for="stok" class="block text-sm font-medium text-gray-700">Jumlah Stok</label>
+                                        <input type="number" name="stok" id="stok" value="{{ old('stok', 0) }}" min="0"
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                                        <p class="mt-1 text-xs text-gray-500">Status stok akan otomatis disesuaikan berdasarkan jumlah stok</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         {{-- Tombol Aksi --}}
-                        <div class="mt-8 flex justify-end">
-                            <a href="{{ route('mitra.produk.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:ring-green-500">
+                        <div class="mt-8 flex justify-end space-x-3">
+                            <a href="{{ route('mitra.produk.index') }}"
+                               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
                                 Batal
                             </a>
-                            <button type="submit" class="ml-4 inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:ring-green-500">
-                                Simpan
+                            <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                Simpan Produk
                             </button>
                         </div>
                     </form>
@@ -120,8 +171,9 @@
     </div>
 </div>
 
-{{-- Script Preview Gambar --}}
+{{-- Scripts --}}
 <script>
+    // Preview gambar
     function previewImage() {
         const preview = document.getElementById('preview-image');
         const container = document.getElementById('preview-container');
@@ -140,6 +192,39 @@
             container.classList.add('hidden');
         }
     }
+
+    // Toggle form berdasarkan tipe produk
+    function toggleProductType() {
+        const tipeSelected = document.querySelector('input[name="tipe_produk"]:checked').value;
+        const sayurFields = document.getElementById('sayur-fields');
+        const alatFields = document.getElementById('alat-fields');
+        const hargaLabel = document.getElementById('harga-label');
+
+        if (tipeSelected === 'SAYUR') {
+            sayurFields.classList.remove('hidden');
+            alatFields.classList.add('hidden');
+            hargaLabel.textContent = 'Harga (Rp/kg)';
+
+            // Set required untuk field sayur
+            document.getElementById('status_booking').required = true;
+            document.getElementById('status_stok').required = true;
+            document.getElementById('stok').required = false;
+        } else {
+            sayurFields.classList.add('hidden');
+            alatFields.classList.remove('hidden');
+            hargaLabel.textContent = 'Harga (Rp/unit)';
+
+            // Set required untuk field alat
+            document.getElementById('status_booking').required = false;
+            document.getElementById('status_stok').required = false;
+            document.getElementById('stok').required = true;
+        }
+    }
+
+    // Jalankan saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleProductType();
+    });
 </script>
 @endsection
 

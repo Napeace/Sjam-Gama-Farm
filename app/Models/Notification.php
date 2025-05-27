@@ -11,26 +11,29 @@ class Notification extends Model
 
     protected $fillable = [
         'title',        // Judul notifikasi
-        'message',      // Pesan/isi notifikasi (sama dengan 'body' di standar web push)
-        'category',     // Kategori notifikasi (misalnya: 'hidroponik', 'peternakan', dll)
-        'image_url',    // URL gambar untuk notifikasi (opsional)
+        'message',      // Pesan/isi notifikasi
+        'category',     // Kategori notifikasi
+        'image_url',    // URL gambar untuk notifikasi
         'link_url',     // URL tujuan ketika notifikasi diklik
-        'is_read',      // Status dibaca (boolean)
-        'visitor_id',   // ID pengunjung (untuk notifikasi personal)
+        'visitor_id',   // ID pengunjung untuk notifikasi personal (null = broadcast)
     ];
 
     protected $casts = [
-        'is_read' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * Scope untuk notifikasi yang belum dibaca
-     */
-    public function scopeUnread($query)
+    public function visitorStates()
     {
-        return $query->where('is_read', false);
+        return $this->hasMany(NotificationVisitorState::class);
+    }
+
+    /**
+     * Get notification state for specific visitor
+     */
+    public function getStateForVisitor($visitorId)
+    {
+        return $this->visitorStates()->where('visitor_id', $visitorId)->first();
     }
 
     /**
@@ -42,32 +45,80 @@ class Notification extends Model
     }
 
     /**
-     * Scope untuk notifikasi berdasarkan visitor ID
+     * Scope untuk notifikasi yang bisa dilihat visitor (broadcast + personal untuk visitor ini)
      */
     public function scopeForVisitor($query, $visitorId)
     {
         return $query->where(function($q) use ($visitorId) {
-            $q->where('visitor_id', $visitorId)
-              ->orWhereNull('visitor_id'); // Include broadcast notifications
+            $q->whereNull('visitor_id') // Broadcast notifications
+              ->orWhere('visitor_id', $visitorId); // Personal notifications
+        })
+        ->whereDoesntHave('visitorStates', function($q) use ($visitorId) {
+            $q->where('visitor_id', $visitorId)->where('is_deleted', true);
         });
     }
 
     /**
-     * Tandai notifikasi sebagai dibaca
+     * Get notifications with read status for specific visitor
      */
-    public function markAsRead()
+    public static function getForVisitorWithStates($visitorId, $limit = 10)
     {
-        $this->update(['is_read' => true]);
-        return $this;
+        $notifications = self::forVisitor($visitorId)
+            ->with(['visitorStates' => function($query) use ($visitorId) {
+                $query->where('visitor_id', $visitorId);
+            }])
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get();
+
+        // Transform to include read status
+        return $notifications->map(function($notification) use ($visitorId) {
+            $state = $notification->visitorStates->first();
+
+            return [
+                'id' => $notification->id,
+                'title' => $notification->title,
+                'message' => $notification->message,
+                'category' => $notification->category,
+                'image_url' => $notification->image_url,
+                'link_url' => $notification->link_url,
+                'is_read' => $state ? $state->is_read : false,
+                'created_at' => $notification->created_at->toISOString(),
+            ];
+        });
     }
 
     /**
-     * Tandai notifikasi sebagai belum dibaca
+     * Mark as read for specific visitor
      */
-    public function markAsUnread()
+    public function markAsReadForVisitor($visitorId)
     {
-        $this->update(['is_read' => false]);
-        return $this;
+        NotificationVisitorState::updateOrCreate(
+            [
+                'notification_id' => $this->id,
+                'visitor_id' => $visitorId
+            ],
+            [
+                'is_read' => true,
+                'is_deleted' => false
+            ]
+        );
+    }
+
+    /**
+     * Mark as deleted for specific visitor
+     */
+    public function markAsDeletedForVisitor($visitorId)
+    {
+        NotificationVisitorState::updateOrCreate(
+            [
+                'notification_id' => $this->id,
+                'visitor_id' => $visitorId
+            ],
+            [
+                'is_deleted' => true
+            ]
+        );
     }
 
     /**

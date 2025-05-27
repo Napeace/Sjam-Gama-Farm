@@ -43,6 +43,29 @@
                         </div>
                         @endif
 
+                        {{-- Filter Tabs --}}
+                        <div class="mb-6">
+                            <div class="border-b border-gray-200">
+                                <nav class="flex space-x-8">
+                                    <a href="{{ route('mitra.produk.index') }}"
+                                       class="py-2 px-1 border-b-2 font-medium text-sm {{ !request('tipe') ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                                        Semua Produk
+                                        <span class="ml-2 bg-gray-100 text-gray-900 py-0.5 px-2.5 rounded-full text-xs">{{ $allProducts->count() }}</span>
+                                    </a>
+                                    <a href="{{ route('mitra.produk.index', ['tipe' => 'SAYUR']) }}"
+                                       class="py-2 px-1 border-b-2 font-medium text-sm {{ request('tipe') == 'SAYUR' ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                                        Sayur
+                                        <span class="ml-2 bg-gray-100 text-gray-900 py-0.5 px-2.5 rounded-full text-xs">{{ $allProducts->where('tipe_produk', 'SAYUR')->count() }}</span>
+                                    </a>
+                                    <a href="{{ route('mitra.produk.index', ['tipe' => 'ALAT']) }}"
+                                       class="py-2 px-1 border-b-2 font-medium text-sm {{ request('tipe') == 'ALAT' ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                                        Alat
+                                        <span class="ml-2 bg-gray-100 text-gray-900 py-0.5 px-2.5 rounded-full text-xs">{{ $allProducts->where('tipe_produk', 'ALAT')->count() }}</span>
+                                    </a>
+                                </nav>
+                            </div>
+                        </div>
+
                         {{-- Card Grid for Products - Enhanced Hover Effects --}}
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             @forelse($products as $product)
@@ -50,9 +73,14 @@
                                      hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-in-out
                                      transform hover:scale-[1.02] active:scale-95">
 
-                                {{-- Card Header with Product Name --}}
-                                <div class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-4 py-3">
-                                    <h5 class="font-semibold text-base truncate">{{ $product->nama }}</h5>
+                                {{-- Card Header with Product Name & Type - REMOVED OVAL --}}
+                                <div class="bg-gradient-to-r {{ $product->tipe_produk == 'SAYUR' ? 'from-green-500 to-teal-500' : 'from-blue-500 to-indigo-500' }} text-white px-4 py-3">
+                                    <div class="flex justify-between items-center">
+                                        <h5 class="font-semibold text-base truncate">{{ $product->nama }}</h5>
+                                        <span class="bg-white bg-opacity-20 text-black text-xs px-2 py-1 rounded-full font-medium">
+                                            {{ $product->tipe_produk }}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 {{-- Product Image with improved styling --}}
@@ -62,9 +90,15 @@
                                              class="w-full h-full object-contain rounded-md transition-transform duration-300 group-hover:scale-105">
                                     @else
                                         <div class="w-full h-full bg-gray-50 flex items-center justify-center rounded-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
+                                            @if($product->tipe_produk == 'SAYUR')
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                                </svg>
+                                            @else
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                                </svg>
+                                            @endif
                                         </div>
                                     @endif
                                 </div>
@@ -74,7 +108,14 @@
                                     {{-- Price --}}
                                     <div class="mb-3">
                                         <span class="text-gray-500 text-xs font-medium">Harga:</span>
-                                        <p class="font-bold text-xl text-green-600">Rp. {{ number_format($product->harga, 0, ',', '.') }}<span class="text-sm font-medium text-gray-600">/kg</span></p>
+                                        <p class="font-bold text-xl {{ $product->tipe_produk == 'SAYUR' ? 'text-green-600' : 'text-blue-600' }}">
+                                            Rp. {{ number_format($product->harga, 0, ',', '.') }}
+                                            @if($product->tipe_produk == 'SAYUR')
+                                                <span class="text-sm font-medium text-gray-600">/kg</span>
+                                            @else
+                                                <span class="text-sm font-medium text-gray-600">/unit</span>
+                                            @endif
+                                        </p>
                                     </div>
 
                                     {{-- Status Badges Row - Redesigned --}}
@@ -92,7 +133,8 @@
                                                 TIDAK DAPAT DIBOOKING
                                             </span>
                                         @endif
-                                        @if($product->status_stok == 'TERSEDIA')
+
+                                        @if($product->stock_status == 'TERSEDIA')
                                             <span class="px-2 py-1 text-xs font-medium rounded-md bg-blue-100 text-blue-800 border border-blue-200 flex items-center
                                                      hover:bg-blue-200 transition-colors duration-200">
                                                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"></path></svg>
@@ -107,17 +149,47 @@
                                         @endif
                                     </div>
 
-                                    {{-- Dates - Redesigned --}}
-                                    <div class="grid grid-cols-2 gap-2 mb-3 text-sm bg-white p-3 rounded-lg shadow-sm">
-                                        <div>
-                                            <span class="text-gray-500 text-xs font-medium block mb-1">Tanggal Tanam:</span>
-                                            <p class="font-medium text-green-800">{{ $product->tanggal_tanam ? $product->tanggal_tanam->format('d/m/Y') : '-' }}</p>
+                                    {{-- Conditional Content Based on Product Type --}}
+                                    @if($product->tipe_produk == 'SAYUR')
+                                        {{-- Dates for Vegetables --}}
+                                        <div class="grid grid-cols-2 gap-2 mb-3 text-sm bg-white p-3 rounded-lg shadow-sm">
+                                            <div>
+                                                <span class="text-gray-500 text-xs font-medium block mb-1">Tanggal Tanam:</span>
+                                                <p class="font-medium text-green-800">{{ $product->tanggal_tanam ? $product->tanggal_tanam->format('d/m/Y') : '-' }}</p>
+                                            </div>
+                                            <div>
+                                                <span class="text-gray-500 text-xs font-medium block mb-1">Prediksi Panen:</span>
+                                                <p class="font-medium text-green-800">{{ $product->prediksi_panen ? $product->prediksi_panen->format('d/m/Y') : '-' }}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <span class="text-gray-500 text-xs font-medium block mb-1">Prediksi Panen:</span>
-                                            <p class="font-medium text-green-800">{{ $product->prediksi_panen ? $product->prediksi_panen->format('d/m/Y') : '-' }}</p>
+                                    @else
+                                        {{-- Stock Information for Tools --}}
+                                        <div class="mb-3 text-sm bg-white p-3 rounded-lg shadow-sm">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-gray-500 text-xs font-medium">Stok Tersedia:</span>
+                                                <p class="font-bold text-lg text-blue-800">{{ $product->stok ?? 0 }} unit</p>
+                                            </div>
+                                            @if($product->stok > 0)
+                                                <div class="mt-2 bg-blue-50 rounded-md p-2">
+                                                    <div class="flex items-center text-blue-700 text-xs">
+                                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        Siap untuk dijual
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="mt-2 bg-red-50 rounded-md p-2">
+                                                    <div class="flex items-center text-red-700 text-xs">
+                                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        Stok habis
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
-                                    </div>
+                                    @endif
 
                                     {{-- Actions - Redesigned with hover effects --}}
                                     <div class="mt-3 flex justify-between gap-2">
@@ -129,7 +201,7 @@
                                             Edit
                                         </a>
 
-                                        <form action="{{ route('mitra.produk.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')" class="flex-1">
+                                        <form action="{{ route('mitra.produk.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?')" class="flex-1">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="w-full inline-flex items-center justify-center px-3 py-2 bg-red-100 text-red-700 rounded-lg
@@ -147,9 +219,15 @@
                             <div class="col-span-full bg-white rounded-lg p-8 text-center border border-gray-200 shadow-sm">
                                 <div class="flex flex-col items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2-2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                     </svg>
-                                    <p class="text-gray-600 text-lg font-medium">Belum ada produk.</p>
+                                    <p class="text-gray-600 text-lg font-medium">
+                                        @if(request('tipe'))
+                                            Belum ada produk {{ strtolower(request('tipe')) }}.
+                                        @else
+                                            Belum ada produk.
+                                        @endif
+                                    </p>
                                     <p class="text-gray-400 mt-1 text-sm">Klik tombol "+" untuk menambahkan produk baru.</p>
                                 </div>
                             </div>

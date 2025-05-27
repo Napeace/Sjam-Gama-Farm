@@ -29,47 +29,80 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="col-span-1 md:col-span-2">
-                                <div class="mb-6">
-                                    <label for="gambar" class="block text-sm font-medium text-gray-700 mb-2">Foto Produk</label>
-                                    <div class="flex items-center justify-center">
-                                        <div class="w-full">
-                                            <div class="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
-                                                <div id="preview-container" class="{{ $product->gambar ? '' : 'hidden' }} mb-4">
-                                                    <img id="preview-image" src="{{ $product->gambar ? asset('storage/' . $product->gambar) : '#' }}" alt="{{ $product->nama }}" class="mx-auto h-40 object-cover">
-                                                </div>
-                                                <label for="gambar" class="cursor-pointer">
-                                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6">
-                                                        <div class="space-y-1 text-center">
-                                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                            </svg>
-                                                            <div class="flex text-sm text-gray-600">
-                                                                <span class="relative bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
-                                                                    {{ $product->gambar ? 'Ganti gambar' : 'Upload gambar' }}
-                                                                </span>
-                                                                <input id="gambar" name="gambar" type="file" class="sr-only" onchange="previewImage()">
-                                                            </div>
-                                                            <p class="text-xs text-gray-500">
-                                                                PNG, JPG, GIF up to 2MB
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </label>
+                        <!-- Tipe Produk Section -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Tipe Produk</label>
+                            <div class="flex space-x-4">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="tipe_produk" value="SAYUR"
+                                           {{ old('tipe_produk', $product->tipe_produk) == 'SAYUR' ? 'checked' : '' }}
+                                           class="sr-only" onchange="toggleProductType()">
+                                    <div class="flex items-center space-x-2 px-4 py-2 border-2 rounded-lg transition-all duration-200 sayur-option">
+                                        <div class="w-4 h-4 rounded-full border-2 flex items-center justify-center">
+                                            <div class="w-2 h-2 rounded-full bg-green-600 hidden sayur-dot"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">Sayur Hidroponik</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="tipe_produk" value="ALAT"
+                                           {{ old('tipe_produk', $product->tipe_produk) == 'ALAT' ? 'checked' : '' }}
+                                           class="sr-only" onchange="toggleProductType()">
+                                    <div class="flex items-center space-x-2 px-4 py-2 border-2 rounded-lg transition-all duration-200 alat-option">
+                                        <div class="w-4 h-4 rounded-full border-2 flex items-center justify-center">
+                                            <div class="w-2 h-2 rounded-full bg-green-600 hidden alat-dot"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">Alat Hidroponik</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Image Upload Section -->
+                        <div class="col-span-1 md:col-span-2">
+                            <div class="mb-6">
+                                <label for="gambar" class="block text-sm font-medium text-gray-700 mb-2">Foto Produk</label>
+                                <div class="flex items-center justify-center">
+                                    <div class="w-full">
+                                        <div class="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
+                                            <div id="preview-container" class="{{ $product->gambar ? '' : 'hidden' }} mb-4">
+                                                <img id="preview-image" src="{{ $product->gambar ? asset('storage/' . $product->gambar) : '#' }}" alt="{{ $product->nama }}" class="mx-auto h-40 object-cover">
                                             </div>
+                                            <label for="gambar" class="cursor-pointer">
+                                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6">
+                                                    <div class="space-y-1 text-center">
+                                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+                                                        <div class="flex text-sm text-gray-600">
+                                                            <span class="relative bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
+                                                                {{ $product->gambar ? 'Ganti gambar' : 'Upload gambar' }}
+                                                            </span>
+                                                            <input id="gambar" name="gambar" type="file" class="sr-only" onchange="previewImage()">
+                                                        </div>
+                                                        <p class="text-xs text-gray-500">
+                                                            PNG, JPG, GIF up to 2MB
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
+                        <!-- Basic Information -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama Produk</label>
                                 <input type="text" name="nama" id="nama" value="{{ old('nama', $product->nama) }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
                             </div>
 
                             <div>
-                                <label for="harga" class="block text-sm font-medium text-gray-700 mb-1">Harga (Rp/kg)</label>
+                                <label for="harga" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <span id="harga-label">Harga (Rp/kg)</span>
+                                </label>
                                 <div class="relative mt-1 rounded-md shadow-sm">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                         <span class="text-gray-500 sm:text-sm">Rp</span>
@@ -82,7 +115,10 @@
                                 <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
                                 <textarea name="deskripsi" id="deskripsi" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">{{ old('deskripsi', $product->deskripsi) }}</textarea>
                             </div>
+                        </div>
 
+                        <!-- Dynamic Fields based on Product Type -->
+                        <div id="sayur-fields" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6" style="display: none;">
                             <div>
                                 <label for="status_booking" class="block text-sm font-medium text-gray-700 mb-1">Status Booking</label>
                                 <select name="status_booking" id="status_booking" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
@@ -111,6 +147,13 @@
                                 <div class="relative">
                                     <input type="date" name="prediksi_panen" id="prediksi_panen" value="{{ old('prediksi_panen', $product->prediksi_panen ? $product->prediksi_panen->format('Y-m-d') : '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
                                 </div>
+                            </div>
+                        </div>
+
+                        <div id="alat-fields" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6" style="display: none;">
+                            <div>
+                                <label for="stok" class="block text-sm font-medium text-gray-700 mb-1">Jumlah Stok</label>
+                                <input type="number" name="stok" id="stok" value="{{ old('stok', $product->stok) }}" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
                             </div>
                         </div>
 
@@ -151,5 +194,55 @@
             }
         }
     }
+
+    function toggleProductType() {
+        const sayurRadio = document.querySelector('input[name="tipe_produk"][value="SAYUR"]');
+        const alatRadio = document.querySelector('input[name="tipe_produk"][value="ALAT"]');
+        const sayurFields = document.getElementById('sayur-fields');
+        const alatFields = document.getElementById('alat-fields');
+        const hargaLabel = document.getElementById('harga-label');
+
+        // Update visual radio buttons
+        const sayurOption = document.querySelector('.sayur-option');
+        const alatOption = document.querySelector('.alat-option');
+        const sayurDot = document.querySelector('.sayur-dot');
+        const alatDot = document.querySelector('.alat-dot');
+
+        if (sayurRadio.checked) {
+            // Show Sayur fields
+            sayurFields.style.display = 'grid';
+            alatFields.style.display = 'none';
+            hargaLabel.textContent = 'Harga (Rp/kg)';
+
+            // Update radio button styles
+            sayurOption.classList.add('border-green-500', 'bg-green-50');
+            sayurOption.classList.remove('border-gray-300');
+            sayurDot.classList.remove('hidden');
+
+            alatOption.classList.remove('border-green-500', 'bg-green-50');
+            alatOption.classList.add('border-gray-300');
+            alatDot.classList.add('hidden');
+
+        } else if (alatRadio.checked) {
+            // Show Alat fields
+            sayurFields.style.display = 'none';
+            alatFields.style.display = 'grid';
+            hargaLabel.textContent = 'Harga (Rp/unit)';
+
+            // Update radio button styles
+            alatOption.classList.add('border-green-500', 'bg-green-50');
+            alatOption.classList.remove('border-gray-300');
+            alatDot.classList.remove('hidden');
+
+            sayurOption.classList.remove('border-green-500', 'bg-green-50');
+            sayurOption.classList.add('border-gray-300');
+            sayurDot.classList.add('hidden');
+        }
+    }
+
+    // Initialize form on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleProductType();
+    });
 </script>
 @endsection

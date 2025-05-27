@@ -26,7 +26,7 @@
 
             <div class="flex flex-wrap items-center justify-center mb-6">
                 <p class="text-gray-700">Ada beberapa varian sayur yang tersedia</p>
-                <a href="#" class="text-green-500 ml-2 hover:underline">hubungi kami</a>
+                <a href="https://wa.me/6285156422350" target='_blank' class="text-green-500 ml-2 hover:underline">hubungi kami</a>
                 <p class="text-gray-700 ml-2">untuk informasi lebih lanjut</p>
             </div>
 
@@ -361,7 +361,12 @@
     .review-item:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
     }
+    #review-section {
+        scroll-margin-top: 60px;
+    }
+
 </style>
 
 <script>

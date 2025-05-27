@@ -13,7 +13,7 @@
                 <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Video</a>
                 <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Pelatihan</a>
                 <a href="{{ route('artikel.hidroponik') }}" class="hover:text-green-300 transition duration-200 font-medium">Artikel</a>
-                <a href="#" class="hover:text-green-300 transition duration-200 font-medium">Review</a>
+                <a href="{{ url('/hidroponik#review-section') }}" class="hover:text-green-300 transition duration-200 font-medium">Review</a>
             </nav>
 
             <!-- Mobile Menu Button -->
@@ -33,7 +33,7 @@
                 <a href="#" class="hover:text-green-300 transition duration-200 py-2">Video</a>
                 <a href="#" class="hover:text-green-300 transition duration-200 py-2">Pelatihan</a>
                 <a href="{{ route('artikel.hidroponik') }}" class="hover:text-green-300 transition duration-200 py-2">Artikel</a>
-                <a href="#" class="hover:text-green-300 transition duration-200 py-2">Review</a>
+                <a href="{{ url('/hidroponik#review-section') }}" class="hover:text-green-300 transition duration-200 py-2">Review</a>
             </div>
         </div>
     </div>

@@ -34,6 +34,8 @@ Route::get('/artikel/{slug}', function ($slug) {
     return view('customer.artikel-detail', compact('artikel'));
 })->name('artikel.show');
 
+Route::get('/api/produk/{type}', [ProductController::class, 'getByType'])->name('api.produk.type');
+
 Route::get('/produk', [ProductController::class, 'publicIndex'])->name('produk.index');
 Route::get('/video', [VideoController::class, 'index'])->name('video.index');
 Route::get('/pelatihan', [PelatihanController::class, 'index'])->name('pelatihan.index');
@@ -41,11 +43,10 @@ Route::get('/review', [ReviewController::class, 'index'])->name('review.index');
 
 Route::prefix('notifications')->group(function () {
     Route::get('/', [NotificationController::class, 'index']);
-    Route::post('/subscribe', [NotificationController::class, 'subscribe']);
-    Route::post('/unsubscribe', [NotificationController::class, 'unsubscribe']);
-    Route::get('/check-subscription', [NotificationController::class, 'checkSubscription']);
     Route::post('/{id}/mark-read', [NotificationController::class, 'markAsRead']);
     Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead']);
+    Route::delete('/{id}/delete', [NotificationController::class, 'delete']);
+    Route::delete('/delete-all', [NotificationController::class, 'deleteAll']);
 });
 
 
