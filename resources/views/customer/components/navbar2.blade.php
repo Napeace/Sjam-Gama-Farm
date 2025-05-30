@@ -51,11 +51,11 @@
                             <p class="text-sm text-gray-600 mb-4">Aktifkan notifikasi untuk mendapatkan update terbaru seputar produk hidroponik, peternakan, dan artikel menarik lainnya.</p>
                             <div class="flex gap-2">
                                 <button @click="allowNotifications()"
-                                        class="flex-1 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition duration-200">
+                                        class="cursor-pointer flex-1 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition duration-200">
                                     Ya, Aktifkan
                                 </button>
                                 <button @click="denyNotifications()"
-                                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition duration-200">
+                                        class="cursor-pointer flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition duration-200">
                                     Nanti Saja
                                 </button>
                             </div>
@@ -80,12 +80,12 @@
                                 <div class="flex items-center space-x-2">
                                     <button x-show="notifCount > 0"
                                             @click="markAllAsRead()"
-                                            class="text-sm text-green-600 hover:text-green-800 font-medium">
+                                            class="cursor-pointer text-sm text-green-600 hover:text-green-800 font-medium">
                                         Tandai semua dibaca
                                     </button>
                                     <button x-show="notifications.length > 0"
                                             @click="deleteAllNotifications()"
-                                            class="text-sm text-red-600 hover:text-red-800 font-medium">
+                                            class="cursor-pointer text-sm text-red-600 hover:text-red-800 font-medium">
                                         Hapus semua
                                     </button>
                                 </div>
@@ -134,7 +134,7 @@
                                         <!-- Delete button -->
                                         <div class="absolute top-3 right-3">
                                             <button @click="deleteNotification($event, notification.id)"
-                                                    class="text-gray-400 hover:text-red-600 transition-colors duration-200 p-1 rounded-full hover:bg-red-50">
+                                                    class="cursor-pointer text-gray-400 hover:text-red-600 transition-colors duration-200 p-1 rounded-full hover:bg-red-50">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
@@ -366,7 +366,7 @@
 
                     if (targetElement) {
                         // Scroll with offset for the sticky header
-                        const headerOffset = 80;
+                        const headerOffset = 60;
                         const elementPosition = targetElement.getBoundingClientRect().top;
                         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 

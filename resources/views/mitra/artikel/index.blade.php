@@ -7,24 +7,27 @@
 
     <!-- Konten Artikel -->
     <div id="mainContent" class="flex-1 bg-gray-100 p-6 overflow-y-auto">
-        <!-- Judul -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Artikel Hidroponik</h1>
+    <!-- Judul dan Tombol -->
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Artikel Hidroponik</h1>
+
+        <div class="flex space-x-4">
+            <!-- Tombol Home -->
+            <a href="{{ route('mitra.dashboard') }}" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75M4.5 10.5V21h15V10.5" />
+                </svg>
+            </a>
+
+            <!-- Tombol + -->
+            <a href="{{ route('mitra.artikel.create') }}" class="bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+            </a>
         </div>
+    </div>
 
-        <!-- Tombol floating Home -->
-        <a href="{{ route('mitra.dashboard') }}" class="fixed right-28 top-24 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg z-50 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75M4.5 10.5V21h15V10.5" />
-            </svg>
-        </a>
-
-        <!-- Tombol floating + -->
-        <a href="{{ route('mitra.artikel.create') }}" class="fixed right-12 top-24 bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg z-50 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-        </a>
 
         <!-- Flash Message -->
         @if(session('success'))

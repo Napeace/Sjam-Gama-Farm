@@ -9,8 +9,6 @@
 </head>
 
 <body class="bg-white h-screen flex flex-col overflow-hidden">
-    <!-- Navbar -->
-    @include('mitra.components.navbar')
 
     <!-- Konten Halaman -->
     <div class="flex-grow overflow-hidden">

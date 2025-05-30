@@ -3,6 +3,10 @@
 @section('title', 'Login Mitra - SJAM GAMA FARM')
 
 @section('content')
+
+<!-- Navbar -->
+@include('mitra.components.navbar')
+
 <div class="flex h-[calc(100vh-48px)] w-full">
 
     <!-- Kiri: Form -->
@@ -20,7 +24,7 @@
                 @csrf
                 <div>
                     <label class="block mb-1 text-sm text-gray-700">Username :</label>
-                    <input type="text" name="username" required autocomplete="off"
+                    <input type="text" name="username" required autocomplete="off" autofocus
                         class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-green-500 focus:outline-none">
                 </div>
 
@@ -67,7 +71,7 @@
         <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-60 h-60 mb-4 rounded-4xl">
         </div>
-        <p class="text-sm font-normal absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white">
+        <p class="text-sm font-normal absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white">
             SJAM GAMA FARM ©2025
         </p>
     </div>
