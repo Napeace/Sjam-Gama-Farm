@@ -13,9 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('training_form_id');
             $table->string('name'); // Nama customer
             $table->string('email');
-            $table->string('phone');
             $table->text('answers'); // Jawaban form dalam format JSON
-            $table->string('payment_proof')->nullable(); // File bukti pembayaran
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status persetujuan
             $table->timestamp('registered_at')->useCurrent();
             $table->timestamps();
