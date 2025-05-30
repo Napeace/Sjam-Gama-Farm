@@ -1,4 +1,4 @@
-# 🌿 SJAM GAMA FARM – Sistem Informasi Penjualan Produk Hidroponik dan Pelatihan
+# 🌿 SJAM GAMA FARM – Sistem Informasi Manajemen Pemasaran Produk Hidroponik dan Pelatihan
 
 Sistem informasi berbasis website yang dikembangkan untuk membantu **SJAM GAMA FARM** dalam mengelola penjualan produk hidroponik dan pelatihan secara digital. Proyek ini merupakan tugas dari mata kuliah **Pengembangan Perangkat Lunak untuk Agroindustri Modern**.
 
