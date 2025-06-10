@@ -300,9 +300,20 @@
         const hoverVideoDescription = document.getElementById('hoverVideoDescription');
         const hoverVideoDate = document.getElementById('hoverVideoDate');
 
-        // Global function to open video modal
+        // Setup CSRF token for AJAX
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (csrfToken) {
+            window.csrfToken = csrfToken.getAttribute('content');
+        }
+
+        // UPDATED: Global function to open video modal with view count increment
         window.openVideoModal = function(videoId, title, description, date = '', dbVideoId = null) {
             if (!videoId) return;
+
+            // Increment view count via AJAX call jika ada dbVideoId
+            if (dbVideoId) {
+                incrementViewCount(dbVideoId);
+            }
 
             const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
             youtubePlayer.src = embedUrl;
@@ -310,6 +321,28 @@
             videoModal.classList.remove('hidden');
             videoModal.classList.add('flex');
         };
+
+        // NEW: Function to increment view count
+        function incrementViewCount(videoId) {
+            // Menggunakan route show untuk increment view count
+            fetch(`/mitra/training-videos/${videoId}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': window.csrfToken || '',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.warn('Failed to increment view count');
+                }
+                // Tidak perlu handle response karena kita hanya perlu increment count
+            })
+            .catch(error => {
+                console.warn('Error incrementing view count:', error);
+            });
+        }
 
         // Close video modal
         function closeModal() {
@@ -325,6 +358,13 @@
         // Close when clicking outside
         videoModal.addEventListener('click', function(e) {
             if (e.target === videoModal) {
+                closeModal();
+            }
+        });
+
+        // ESC key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !videoModal.classList.contains('hidden')) {
                 closeModal();
             }
         });

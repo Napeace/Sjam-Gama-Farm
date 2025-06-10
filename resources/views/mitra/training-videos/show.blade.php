@@ -102,13 +102,6 @@
                             </div>
 
                             <div>
-                                <span class="text-sm font-medium text-gray-700">Total Views:</span>
-                                <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {{ number_format($trainingVideo->view_count) }}
-                                </span>
-                            </div>
-
-                            <div>
                                 <span class="text-sm font-medium text-gray-700 block mb-1">Dibuat:</span>
                                 <span class="text-sm text-gray-500">{{ $trainingVideo->created_at->format('d F Y, H:i') }}</span>
                             </div>

@@ -3,6 +3,9 @@
 @section('title', 'Edit Akun - SJAM GAMA FARM')
 
 @section('content')
+
+@include('mitra.components.navbar')
+
 <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
     <div class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden mt-[-70px]">
         <div class="bg-green-500 py-4">

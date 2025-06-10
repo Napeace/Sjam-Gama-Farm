@@ -53,7 +53,19 @@ class TrainingVideoController extends Controller
 
     public function show(TrainingVideo $trainingVideo)
     {
+        // Increment view count
         $trainingVideo->incrementViewCount();
+
+        // Jika request adalah AJAX, return JSON response
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'view_count' => $trainingVideo->view_count,
+                'message' => 'View count incremented'
+            ]);
+        }
+
+        // Jika bukan AJAX, return view seperti biasa
         return view('mitra.training-videos.show', compact('trainingVideo'));
     }
 
